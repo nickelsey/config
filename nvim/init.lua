@@ -100,7 +100,6 @@ vim.g.have_nerd_font = false
 
 -- Make line numbers default
 vim.o.number = true
-vim.o.relativenumber = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.o.relativenumber = true
@@ -661,7 +660,7 @@ require('lazy').setup({
                     Lua = {},
                 },
             })
-            vim.lsp.enable 'lua_ls'
+            vim.lsp.enable 'lua-language-server'
         end,
     },
 
@@ -802,93 +801,20 @@ require('lazy').setup({
         -- change the command in the config to whatever the name of that colorscheme is.
         --
         -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-        'rose-pine/neovim',
+        'folke/tokyonight.nvim',
         priority = 1000, -- Make sure to load this before all the other start plugins.
         config = function()
             ---@diagnostic disable-next-line: missing-fields
-            require('rose-pine').setup {
-                variant = 'auto',      -- auto, main, moon, or dawn
-                dark_variant = 'main', -- main, moon, or dawn
-                dim_inactive_windows = false,
-                extend_background_behind_borders = true,
-
-                enable = {
-                    terminal = true,
-                    legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
-                    migrations = true,        -- Handle deprecated options automatically
-                },
-
+            require('tokyonight').setup {
                 styles = {
-                    bold = true,
-                    italic = true,
-                    transparency = false,
+                    comments = { italic = false }, -- Disable italics in comments
                 },
-
-                groups = {
-                    border = 'muted',
-                    link = 'iris',
-                    panel = 'surface',
-
-                    error = 'love',
-                    hint = 'iris',
-                    info = 'foam',
-                    note = 'pine',
-                    todo = 'rose',
-                    warn = 'gold',
-
-                    git_add = 'foam',
-                    git_change = 'rose',
-                    git_delete = 'love',
-                    git_dirty = 'rose',
-                    git_ignore = 'muted',
-                    git_merge = 'iris',
-                    git_rename = 'pine',
-                    git_stage = 'iris',
-                    git_text = 'rose',
-                    git_untracked = 'subtle',
-
-                    h1 = 'iris',
-                    h2 = 'foam',
-                    h3 = 'rose',
-                    h4 = 'gold',
-                    h5 = 'pine',
-                    h6 = 'foam',
-                },
-
-                palette = {
-                    -- Override the builtin palette per variant
-                    -- moon = {
-                    --     base = '#18191a',
-                    --     overlay = '#363738',
-                    -- },
-                },
-
-                -- NOTE: Highlight groups are extended (merged) by default. Disable this
-                -- per group via `inherit = false`
-                highlight_groups = {
-                    -- Comment = { fg = "foam" },
-                    -- StatusLine = { fg = "love", bg = "love", blend = 15 },
-                    -- VertSplit = { fg = "muted", bg = "muted" },
-                    -- Visual = { fg = "base", bg = "text", inherit = false },
-                },
-
-                before_highlight = function(group, highlight, palette)
-                    -- Disable all undercurls
-                    -- if highlight.undercurl then
-                    --     highlight.undercurl = false
-                    -- end
-                    --
-                    -- Change palette colour
-                    -- if highlight.fg == palette.pine then
-                    --     highlight.fg = palette.foam
-                    -- end
-                end,
             }
 
             -- Load the colorscheme here.
             -- Like many other themes, this one has different styles, and you could load
             -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-            vim.cmd.colorscheme 'rose-pine-moon'
+            vim.cmd.colorscheme 'tokyonight-night'
         end,
     },
 
@@ -934,32 +860,14 @@ require('lazy').setup({
     { -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         config = function()
-            local languages = {
-                'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc'
-            }
-
-            require('nvim-treesitter.configs').setup({
-                ensure_installed = languages,
-                auto_install = true,
-
-                highlight = { enable = true },
-                indent = { enable = true },
-            })
-
+            local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query',
+                'vim', 'vimdoc' }
+            require('nvim-treesitter').install(filetypes)
             vim.api.nvim_create_autocmd('FileType', {
-                pattern = languages,
+                pattern = filetypes,
                 callback = function() vim.treesitter.start() end,
             })
         end,
-
-        -- config = function()
-        --   local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-        --   require('nvim-treesitter').install(filetypes)
-        --   vim.api.nvim_create_autocmd('FileType', {
-        --     pattern = filetypes,
-        --     callback = function() vim.treesitter.start() end,
-        --   })
-        -- end,
     },
 
     -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
