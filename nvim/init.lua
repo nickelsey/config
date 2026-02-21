@@ -486,11 +486,13 @@ require('lazy').setup({
             -- Automatically install LSPs and related tools to stdpath for Neovim
             -- Mason must be loaded before its dependents so we need to set it up here.
             -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-            { 'mason-org/mason.nvim', opts = {} },
+            { 'mason-org/mason.nvim',           opts = {} },
+            -- This plugin streamlines Neovim's LSP setup by automating server installation and activation, providing helpful management commands, and mapping mason.nvim packages to nvim-lspconfig configurations.
+            { 'mason-org/mason-lspconfig.nvim', opts = {} },
             'WhoIsSethDaniel/mason-tool-installer.nvim',
 
             -- Useful status updates for LSP.
-            { 'j-hui/fidget.nvim',    opts = {} },
+            { 'j-hui/fidget.nvim', opts = {} },
 
             -- Allows extra capabilities provided by blink.cmp
             'saghen/blink.cmp',
@@ -623,8 +625,8 @@ require('lazy').setup({
             -- You can press `g?` for help in this menu.
             local ensure_installed = vim.tbl_keys(servers or {})
             vim.list_extend(ensure_installed, {
-                'lua-language-server', -- Lua Language server
-                'stylua',              -- Used to format Lua code
+                'lua_ls', -- Lua Language server
+                'stylua', -- Used to format Lua code
                 -- You can add other tools here that you want Mason to install
             })
 
@@ -637,7 +639,7 @@ require('lazy').setup({
             end
 
             -- Special Lua Config, as recommended by neovim help docs
-            vim.lsp.config('lua-language-server', {
+            vim.lsp.config('lua_ls', {
                 on_init = function(client)
                     if client.workspace_folders then
                         local path = client.workspace_folders[1].name
@@ -661,7 +663,7 @@ require('lazy').setup({
                     Lua = {},
                 },
             })
-            vim.lsp.enable 'lua-language-server'
+            vim.lsp.enable 'lua_ls'
         end,
     },
 
@@ -803,19 +805,19 @@ require('lazy').setup({
         --
         -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
         'rose-pine/neovim',
-        priority = 1000,         -- Make sure to load this before all the other start plugins.
+        priority = 1000, -- Make sure to load this before all the other start plugins.
         config = function()
             ---@diagnostic disable-next-line: missing-fields
             require('rose-pine').setup {
-                variant = 'auto',              -- auto, main, moon, or dawn
-                dark_variant = 'main',         -- main, moon, or dawn
+                variant = 'auto',      -- auto, main, moon, or dawn
+                dark_variant = 'main', -- main, moon, or dawn
                 dim_inactive_windows = false,
                 extend_background_behind_borders = true,
 
                 enable = {
                     terminal = true,
-                    legacy_highlights = true,         -- Improve compatibility for previous versions of Neovim
-                    migrations = true,                -- Handle deprecated options automatically
+                    legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
+                    migrations = true,        -- Handle deprecated options automatically
                 },
 
                 styles = {
@@ -936,7 +938,7 @@ require('lazy').setup({
         config = function()
             local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query',
                 'vim', 'vimdoc' }
-            require('nvim-treesitter').install(filetypes)
+            require('nvim-treesitter').setup(filetypes)
             vim.api.nvim_create_autocmd('FileType', {
                 pattern = filetypes,
                 callback = function() vim.treesitter.start() end,
