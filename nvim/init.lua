@@ -623,8 +623,8 @@ require('lazy').setup({
             -- You can press `g?` for help in this menu.
             local ensure_installed = vim.tbl_keys(servers or {})
             vim.list_extend(ensure_installed, {
-                'lua_ls', -- Lua Language server
-                'stylua', -- Used to format Lua code
+                'lua-language-server', -- Lua Language server
+                'stylua',              -- Used to format Lua code
                 -- You can add other tools here that you want Mason to install
             })
 
@@ -637,7 +637,7 @@ require('lazy').setup({
             end
 
             -- Special Lua Config, as recommended by neovim help docs
-            vim.lsp.config('lua_ls', {
+            vim.lsp.config('lua-language-server', {
                 on_init = function(client)
                     if client.workspace_folders then
                         local path = client.workspace_folders[1].name
@@ -934,14 +934,32 @@ require('lazy').setup({
     { -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         config = function()
-            local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query',
-                'vim', 'vimdoc' }
-            require('nvim-treesitter').install(filetypes)
+            local languages = {
+                'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc'
+            }
+
+            require('nvim-treesitter.configs').setup({
+                ensure_installed = languages,
+                auto_install = true,
+
+                highlight = { enable = true },
+                indent = { enable = true },
+            })
+
             vim.api.nvim_create_autocmd('FileType', {
-                pattern = filetypes,
+                pattern = languages,
                 callback = function() vim.treesitter.start() end,
             })
         end,
+
+        -- config = function()
+        --   local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+        --   require('nvim-treesitter').install(filetypes)
+        --   vim.api.nvim_create_autocmd('FileType', {
+        --     pattern = filetypes,
+        --     callback = function() vim.treesitter.start() end,
+        --   })
+        -- end,
     },
 
     -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
