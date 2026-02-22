@@ -10,9 +10,9 @@ alias vim="nvim"
 
 export EDITOR=vim
 alias ssh='ssh -Y'
-alias ll='ls -lh'
-alias ls='ls -GFh'
-alias la='ls -lGFha'
+alias ll='ls -lh --color=auto'
+alias ls='ls -Fh --color=auto'
+alias la='ls -lFha --color=auto'
 alias root='root -l'
 alias vi=vim
 alias edit='open -a xcode'
