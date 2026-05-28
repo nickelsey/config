@@ -1,5 +1,10 @@
--- You can add your own plugins here or in other files in this directory!
---  I promise not to create any merge conflicts in this directory :)
---
--- See the kickstart.nvim README for more information
-return {}
+-- Custom plugins - each file calls vim.pack.add directly
+require 'custom.plugins.claude'
+require 'custom.plugins.codecompanion'
+require 'custom.plugins.copilot'
+require 'custom.plugins.leap'
+require 'custom.plugins.neotest'
+require 'custom.plugins.telescope_fb'
+require 'custom.plugins.neovim_project'
+require 'custom.plugins.toggleterm'
+require 'custom.plugins.octo'

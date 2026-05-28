@@ -1,19 +1,23 @@
-return {
-  'nvim-telescope/telescope-file-browser.nvim',
-  dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
-  config = function()
-    require('telescope').setup {
-      extensions = {
-        file_browser = {
-          theme = 'ivy',
-          hijack_netrw = true,
-        },
-      },
-    }
+-- telescope-file-browser
+-- https://github.com/nvim-telescope/telescope-file-browser.nvim
 
-    require('telescope').load_extension 'file_browser'
+local gh = function(repo) return 'https://github.com/' .. repo end
 
-    -- Open file browser with the path of the current buffer
-    vim.keymap.set('n', '<leader>sc', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', { desc = 'File browser (current dir)' })
-  end,
+vim.pack.add {
+  gh 'nvim-telescope/telescope-file-browser.nvim',
+  gh 'nvim-telescope/telescope.nvim',
+  gh 'nvim-lua/plenary.nvim',
 }
+
+require('telescope').setup {
+  extensions = {
+    file_browser = {
+      theme = 'ivy',
+      hijack_netrw = true,
+    },
+  },
+}
+
+require('telescope').load_extension 'file_browser'
+
+vim.keymap.set('n', '<leader>sc', ':Telescope file_browser path=%:p:h select_buffer=true<CR>', { desc = 'File browser (current dir)' })
